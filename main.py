@@ -11,6 +11,8 @@ parser.add_argument("--D_ratio", type=float)
 parser.add_argument("--n_cells", type=int)
 parser.add_argument("--CCL21_added", type=str)
 parser.add_argument("--cell_motility", type=float)
+parser.add_argument("--cell_init", type=str, choices=["grid", "random"])
+parser.add_argument("--cell_init_seed", type=int, default=None)
 
 args = parser.parse_args()
 
@@ -21,6 +23,8 @@ Pe = args.pe
 n_cells = args.n_cells
 CCL21_added = args.CCL21_added.strip().lower() in ("true", "1", "yes")
 cell_motility = args.cell_motility
+cell_init = args.cell_init
+cell_init_seed = args.cell_init_seed
 
 Lx, Ly = 1600, 1400
 Nx, Ny = 161, 141
@@ -30,7 +34,7 @@ D_CCL21 = 100.0
 D_CCL19 = D_ratio * D_CCL21
 d = 1.3e-6
 dt = 0.1
-T_total = 5400
+T_total = 100
 Nt_total = int(T_total / dt)
 
 u = 0.084 * Pe
@@ -115,20 +119,24 @@ def step(c1, c2, source):
 
 
 n_bound = n_unbound = n_cells // 2
-rng = np.random.default_rng()
+rng = np.random.default_rng(cell_init_seed)
 
-nx = int(np.sqrt(n_cells))
-ny = int(np.ceil(n_cells / nx))
+if cell_init == "grid":
+    nx = int(np.sqrt(n_cells))
+    ny = int(np.ceil(n_cells / nx))
 
-dx_grid = Lx / nx
-dy_grid = (1200 - 200) / ny
+    dx_grid = Lx / nx
+    dy_grid = (1200 - 200) / ny
 
-grid_x = np.linspace(0, Lx - dx_grid, nx) + dx_grid / 2
-grid_y = np.linspace(200, 1200 - dy_grid, ny) + dy_grid / 2
+    grid_x = np.linspace(0, Lx - dx_grid, nx) + dx_grid / 2
+    grid_y = np.linspace(200, 1200 - dy_grid, ny) + dy_grid / 2
 
-gx, gy = np.meshgrid(grid_x, grid_y)
-cell_x = gx.flatten()[:n_cells]
-cell_y = gy.flatten()[:n_cells]
+    gx, gy = np.meshgrid(grid_x, grid_y)
+    cell_x = gx.flatten()[:n_cells]
+    cell_y = gy.flatten()[:n_cells]
+else:
+    cell_x = rng.uniform(0.0, Lx, n_cells)
+    cell_y = rng.uniform(200.0, 1200.0, n_cells)
 
 initial_cell_x = np.copy(cell_x)
 initial_cell_y = np.copy(cell_y)
