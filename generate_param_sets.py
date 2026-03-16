@@ -1,11 +1,10 @@
 import polars as pl
 from itertools import product
 
+
 def expand_params(base_df: pl.DataFrame, varying: dict) -> pl.DataFrame:
     vary_df = pl.DataFrame(
-        list(product(*varying.values())),
-        schema=list(varying.keys()),
-        orient="row"
+        list(product(*varying.values())), schema=list(varying.keys()), orient="row"
     )
     return base_df.join(vary_df, how="cross")
 
@@ -13,9 +12,9 @@ def expand_params(base_df: pl.DataFrame, varying: dict) -> pl.DataFrame:
 def main():
     # hardcode for now. maybe parse args instead - how to pass lists of params cleanly?
     varying = {
-        'chi_values': [0.4, 4.0, 40],
-        'cell_dist': ['uniform', 'random'],
-        'CCL21_added': ['true', 'false']
+        "chi_values": [0.4, 4.0, 40],
+        "cell_dist": ["uniform", "random"],
+        "CCL21_added": ["true", "false"],
     }
 
     fixed_params = pl.read_csv("fixed_params.csv")
