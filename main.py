@@ -12,7 +12,7 @@ parser.add_argument("--n_cells", type=int)
 parser.add_argument("--CCL21_added", type=str)
 parser.add_argument("--cell_motility", type=float)
 parser.add_argument("--cell_init", type=str, choices=["grid", "random"])
-parser.add_argument("--cell_init_seed", type=int, default=None)
+parser.add_argument("--rng_seed", type=int, default=None)
 
 args = parser.parse_args()
 
@@ -24,7 +24,7 @@ n_cells = args.n_cells
 CCL21_added = args.CCL21_added.strip().lower() in ("true", "1", "yes")
 cell_motility = args.cell_motility
 cell_init = args.cell_init
-cell_init_seed = args.cell_init_seed
+rng_seed = args.rng_seed
 
 Lx, Ly = 1600, 1400
 Nx, Ny = 161, 141
@@ -103,7 +103,9 @@ def step(c1, c2, source):
                 D_CCL19 * lap1 - u * adv_y1 - d * c1[i, j] + source[i, j]
             )
 
-            c2_new[i, j] = c2[i, j] + dt * (D_CCL21 * lap2 - u * adv_y2 - d * c2[i, j])
+            c2_new[i, j] = c2[i, j] + dt * (
+                D_CCL21 * lap2 - u * adv_y2 - d * c2[i, j]
+            )
 
     c1_new[:, 0] = 0.0
     c1_new[:, -1] = 0.0
@@ -119,7 +121,7 @@ def step(c1, c2, source):
 
 
 n_bound = n_unbound = n_cells // 2
-rng = np.random.default_rng(cell_init_seed)
+rng = np.random.default_rng(rng_seed)
 
 if cell_init == "grid":
     nx = int(np.sqrt(n_cells))
