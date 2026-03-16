@@ -11,7 +11,7 @@ parser.add_argument('--chi', type=float)
 parser.add_argument('--alpha', type=float)
 parser.add_argument('--pe', type=float)
 parser.add_argument('--D_ratio', type=float)
-parser.add_argument('--n_cells', type=float)
+parser.add_argument('--n_cells', type=int)
 parser.add_argument('--CCL21_added', type=str)
 parser.add_argument('--cell_motility', type=float)
 
