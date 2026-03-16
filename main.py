@@ -1,21 +1,29 @@
 import numpy as np
+import argparse
+
 
 ccl19_file = open("CCL19_all.txt", "w")
 ccl21_file = open("CCL21_all.txt", "w")
 
-with open("params.txt", "r") as f:
-    line = f.readline().strip()
-    while line.startswith("#") or not line:
-        line = f.readline().strip()
-    params = line.split(",")
+parser = argparse.ArgumentParser()
 
-chi = float(params[0])
-alpha = float(params[1])
-Pe = float(params[2])
-D_ratio = float(params[3])
-n_cells = int(params[4])
-CCL21_added = params[5].strip().lower() in ("true", "1", "yes")
-cell_motility = float(params[6])
+parser.add_argument('--chi', type=float)
+parser.add_argument('--alpha', type=float)
+parser.add_argument('--pe', type=float)
+parser.add_argument('--D_ratio', type=float)
+parser.add_argument('--n_cells', type=float)
+parser.add_argument('--CCL21_added', type=str)
+parser.add_argument('--cell_motility', type=float)
+
+args = parser.parse_args()
+
+chi = args.chi
+alpha = args.alpha
+D_ratio = args.D_ratio
+Pe = args.pe
+n_cells = args.n_cells
+CCL21_added = args.CCL21_added.strip().lower() in ("true", "1", "yes")
+cell_motility = args.cell_motility
 
 Lx, Ly = 1600, 1400
 Nx, Ny = 161, 141
