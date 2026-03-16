@@ -9,7 +9,7 @@ parser.add_argument("--alpha", type=float)
 parser.add_argument("--pe", type=float)
 parser.add_argument("--D_ratio", type=float)
 parser.add_argument("--n_cells", type=int)
-parser.add_argument("--CCL21_added", type=str)
+parser.add_argument("--CCL21_added", type=str.casefold, choices=["true", "false", "1", "0", "yes", "no"])
 parser.add_argument("--cell_motility", type=float)
 parser.add_argument("--cell_init", type=str, choices=["grid", "random"])
 parser.add_argument("--rng_seed", type=int, default=None)
@@ -21,7 +21,7 @@ alpha = args.alpha
 D_ratio = args.D_ratio
 Pe = args.pe
 n_cells = args.n_cells
-CCL21_added = args.CCL21_added.strip().lower() in ("true", "1", "yes")
+CCL21_added = args.CCL21_added in ("true", "1", "yes")
 cell_motility = args.cell_motility
 cell_init = args.cell_init
 rng_seed = args.rng_seed
