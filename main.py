@@ -2,9 +2,6 @@ import numpy as np
 import argparse
 
 
-ccl19_file = open("CCL19_all.txt", "w")
-ccl21_file = open("CCL21_all.txt", "w")
-
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--chi', type=float)
@@ -162,6 +159,9 @@ cell_x_timepoints = []
 cell_y_timepoints = []
 cell_type_timepoints = []
 frames = []
+
+ccl19_file = open("CCL19_all.txt", "w")
+ccl21_file = open("CCL21_all.txt", "w")
 
 for n in range(Nt_total):
     
