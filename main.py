@@ -34,9 +34,7 @@ D_CCL19 = D_ratio*D_CCL21
 d = 1.3e-6
 dt = 0.1
 T_total = 5400
-T_record = 5400
 Nt_total = int(T_total/dt)
-Nt_record = int(T_record/dt)
 
 u = 0.084 * Pe                   
 
@@ -151,7 +149,7 @@ cell_type = np.zeros(n_cells, dtype=int)
 cell_type[n_unbound:] = 1
 
 sim_dt = 0.1
-start_t = T_total - T_record
+start_t = 0
 end_t = T_total
 frames_time = np.arange(start_t, end_t + 1e-9, 10.0)
 num_frames = len(frames_time)
@@ -257,9 +255,8 @@ output_file = "cell_locations.txt"
 with open(output_file, "w") as f:
     f.write("CellID,Time(s),x(microns),y(microns),bound\n")
     for t_idx, t in enumerate(times_recorded):
-        if t >= (T_total - T_record - 1e-9):
-            xs = cell_x_timepoints[t_idx]
-            ys = cell_y_timepoints[t_idx]
-            types = cell_type_timepoints[t_idx]
-            for cell_id, (xv, yv, bound_status) in enumerate(zip(xs, ys, types)):
-                f.write(f"{cell_id},{t:.3e},{xv:.3e},{yv:.3e},{int(bound_status)}\n")
+        xs = cell_x_timepoints[t_idx]
+        ys = cell_y_timepoints[t_idx]
+        types = cell_type_timepoints[t_idx]
+        for cell_id, (xv, yv, bound_status) in enumerate(zip(xs, ys, types)):
+            f.write(f"{cell_id},{t:.3e},{xv:.3e},{yv:.3e},{int(bound_status)}\n")
