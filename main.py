@@ -88,6 +88,9 @@ def step(c1, c2, source):
     c1_c = c1[1:-1, 1:-1]
     c2_c = c2[1:-1, 1:-1]
 
+    u_p = max(0.0, u)
+    u_m = min(0.0, u)
+
     lap1 = (
         (c1[2:, 1:-1] - 2 * c1_c + c1[:-2, 1:-1]) / dx**2 +
         (c1[1:-1, 2:] - 2 * c1_c + c1[1:-1, :-2]) / dy**2
@@ -97,14 +100,19 @@ def step(c1, c2, source):
         (c2[1:-1, 2:] - 2 * c2_c + c2[1:-1, :-2]) / dy**2
     )
 
-    adv_y1 = (c1[1:-1, 2:] - c1_c) / dy
-    adv_y2 = (c2[1:-1, 2:] - c2_c) / dy
+    c1_y_p = (c1[1:-1, 2:] - c1_c) / dy
+    c1_y_m = (c1_c - c1[1:-1, :-2]) / dy
+    c2_y_p = (c2[1:-1, 2:] - c2_c) / dy
+    c2_y_m = (c2_c - c2[1:-1, :-2]) / dy
+
+    adv_y1 = u_p * c1_y_m + u_m * c1_y_p
+    adv_y2 = u_p * c2_y_m + u_m * c2_y_p
 
     c1_new[1:-1, 1:-1] = c1_c + dt * (
-        D_CCL19 * lap1 - u * adv_y1 - d * c1_c + source[1:-1, 1:-1]
+        D_CCL19 * lap1 - adv_y1 - d * c1_c + source[1:-1, 1:-1]
     )
     c2_new[1:-1, 1:-1] = c2_c + dt * (
-        D_CCL21 * lap2 - u * adv_y2 - d * c2_c
+        D_CCL21 * lap2 - adv_y2 - d * c2_c
     )
 
     c1_new[:, 0] = 0.0
