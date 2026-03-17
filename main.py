@@ -1,5 +1,6 @@
 import numpy as np
 import argparse
+from pathlib import Path
 
 
 parser = argparse.ArgumentParser()
@@ -14,6 +15,8 @@ parser.add_argument("--cell_motility", type=float)
 parser.add_argument("--cell_init", type=str, choices=["grid", "random"])
 parser.add_argument("--rng_seed", type=int, default=None)
 
+parser.add_argument("--output_dir", type=str)
+
 args = parser.parse_args()
 
 chi = args.chi
@@ -25,6 +28,9 @@ CCL21_added = args.CCL21_added in ("true", "1", "yes")
 cell_motility = args.cell_motility
 cell_init = args.cell_init
 rng_seed = args.rng_seed
+
+output_dir = Path(args.output_dir)
+output_dir.mkdir(exist_ok=True)
 
 Lx, Ly = 1600, 1400
 Nx, Ny = 161, 141
@@ -161,8 +167,8 @@ cell_y_timepoints = []
 cell_type_timepoints = []
 frames = []
 
-ccl19_file = open("CCL19_all.txt", "w")
-ccl21_file = open("CCL21_all.txt", "w")
+ccl19_file = open(output_dir / "CCL19_all.txt", "w")
+ccl21_file = open(output_dir / "CCL21_all.txt", "w")
 
 for n in range(Nt_total):
     if n % 100 == 0:
@@ -259,9 +265,9 @@ for n in range(Nt_total):
 ccl19_file.close()
 ccl21_file.close()
 
-output_file = "cell_locations.txt"
+cell_locations_file = output_dir / "cell_locations.txt"
 
-with open(output_file, "w") as f:
+with open(cell_locations_file, "w") as f:
     f.write("CellID,Time(s),x(microns),y(microns),bound\n")
     for t_idx, t in enumerate(times_recorded):
         xs = cell_x_timepoints[t_idx]
