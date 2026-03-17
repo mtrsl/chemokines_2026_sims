@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("--chi", type=float)
 parser.add_argument("--alpha", type=float)
-parser.add_argument("--pe", type=float)
+parser.add_argument("--Pe", type=float)
 parser.add_argument("--D_ratio", type=float)
 parser.add_argument("--n_cells", type=int)
 parser.add_argument("--CCL21_added", type=str.casefold, choices=["true", "false", "1", "0", "yes", "no"])
@@ -22,7 +22,7 @@ args = parser.parse_args()
 chi = args.chi
 alpha = args.alpha
 D_ratio = args.D_ratio
-Pe = args.pe
+Pe = args.Pe
 n_cells = args.n_cells
 CCL21_added = args.CCL21_added in ("true", "1", "yes")
 cell_motility = args.cell_motility
