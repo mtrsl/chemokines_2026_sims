@@ -40,7 +40,7 @@ D_CCL21 = 100.0
 D_CCL19 = D_ratio * D_CCL21
 d = 1.3e-6
 dt = 0.1
-T_total = 100
+T_total = 5400
 Nt_total = int(T_total / dt)
 
 u = 0.084 * Pe
