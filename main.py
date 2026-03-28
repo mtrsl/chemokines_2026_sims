@@ -3,37 +3,7 @@ import argparse
 from pathlib import Path
 
 
-def main():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("--chi", type=float)
-    parser.add_argument("--alpha", type=float)
-    parser.add_argument("--Pe", type=float)
-    parser.add_argument("--D_ratio", type=float)
-    parser.add_argument("--n_cells", type=int)
-    parser.add_argument("--CCL21_added", type=str.casefold, choices=["true", "false", "1", "0", "yes", "no"])
-    parser.add_argument("--cell_motility", type=float)
-    parser.add_argument("--cell_init", type=str, choices=["grid", "random"])
-    parser.add_argument("--rng_seed", type=int, default=None)
-    parser.add_argument("--n_runs", type=int, default=3)
-
-    parser.add_argument("--output_dir", type=str, required=True)
-
-    args = parser.parse_args()
-
-    chi = args.chi
-    alpha = args.alpha
-    D_ratio = args.D_ratio
-    Pe = args.Pe
-    n_cells = args.n_cells
-    CCL21_added = args.CCL21_added in ("true", "1", "yes")
-    cell_motility = args.cell_motility
-    cell_init = args.cell_init
-    rng_seed = args.rng_seed
-
-    output_dir = Path(args.output_dir)
-    output_dir.mkdir(exist_ok=True)
-
+def run(chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep):
     Lx, Ly = 1600, 1400
     Nx, Ny = 161, 141
     dx, dy = Lx / (Nx - 1), Ly / (Ny - 1)
@@ -131,7 +101,6 @@ def main():
 
 
     n_bound = n_unbound = n_cells // 2
-    rng = np.random.default_rng(rng_seed)
 
     if cell_init == "grid":
         nx = int(np.sqrt(n_cells))
@@ -171,8 +140,11 @@ def main():
     cell_type_timepoints = []
     frames = []
 
-    ccl19_file = open(output_dir / "CCL19_all.txt", "w")
-    ccl21_file = open(output_dir / "CCL21_all.txt", "w")
+    ccl19_file_name = "CCL19_all_" + str(rep) + ".txt"
+    ccl21_file_name = "CCL21_all_" + str(rep) + ".txt"
+
+    ccl19_file = open(output_dir / ccl19_file_name, "w")
+    ccl21_file = open(output_dir / ccl21_file_name, "w")
 
     x0 = x[0]
     y0 = y[0]
@@ -289,7 +261,8 @@ def main():
     ccl19_file.close()
     ccl21_file.close()
 
-    cell_locations_file = output_dir / "cell_locations.txt"
+    cell_locations_file_name = "cell_locations_" + str(rep) + ".txt"
+    cell_locations_file = output_dir / cell_locations_file_name
 
     with open(cell_locations_file, "w") as f:
         f.write("CellID,Time(s),x(microns),y(microns),bound\n")
@@ -299,6 +272,45 @@ def main():
             types = cell_type_timepoints[t_idx]
             for cell_id, (xv, yv, bound_status) in enumerate(zip(xs, ys, types)):
                 f.write(f"{cell_id},{t:.3e},{xv:.3e},{yv:.3e},{int(bound_status)}\n")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--chi", type=float, required=True)
+    parser.add_argument("--alpha", type=float, required=True)
+    parser.add_argument("--Pe", type=float, required=True)
+    parser.add_argument("--D_ratio", type=float, required=True)
+    parser.add_argument("--n_cells", type=int, required=True)
+    parser.add_argument("--CCL21_added", type=str.casefold, choices=["true", "false", "1", "0", "yes", "no"], required=True)
+    parser.add_argument("--cell_motility", type=float, required=True)
+    parser.add_argument("--cell_init", type=str, choices=["grid", "random"], required=True)
+    parser.add_argument("--rng_seed", type=int, default=None)
+    parser.add_argument("--n_reps", type=int, default=1)
+
+    parser.add_argument("--output_dir", type=str, required=True)
+
+    args = parser.parse_args()
+
+    chi = args.chi
+    alpha = args.alpha
+    D_ratio = args.D_ratio
+    Pe = args.Pe
+    n_cells = args.n_cells
+    CCL21_added = args.CCL21_added in ("true", "1", "yes")
+    cell_motility = args.cell_motility
+    cell_init = args.cell_init
+    rng_seed = args.rng_seed
+    n_reps = args.n_reps
+
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(exist_ok=True)
+
+    rng = np.random.default_rng(rng_seed)
+
+    for rep in range(n_reps):
+        run(chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep)
+
 
 if __name__ == "__main__":
     main()
