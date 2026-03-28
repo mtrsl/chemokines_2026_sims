@@ -23,8 +23,10 @@ def main():
 
     # hardcode for now. maybe parse args instead - how to pass lists of params cleanly?
     varying = {
-        "chi": [0.4, 4.0, 40],
-        "cell_init": ["grid", "random"],
+        "chi": [0.04, 0.4, 4.0, 40.0],
+        "alpha": [0.0008, 0.0065, 0.05, 0.388, 3],
+        "Pe": [-5.0, 0.0, 5.0],
+        "n_cells": [20, 50, 120, 210],
         "CCL21_added": ["true", "false"],
     }
 
