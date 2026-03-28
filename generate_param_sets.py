@@ -13,8 +13,8 @@ def expand_params(base_df: pl.DataFrame, varying: dict) -> pl.DataFrame:
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--fixed_params_file", type=str, required=True)
-    parser.add_argument("--all_params_file", type=str, required=True)
+    parser.add_argument("fixed_params_file", type=str)
+    parser.add_argument("all_params_file", type=str)
 
     args = parser.parse_args()
 
