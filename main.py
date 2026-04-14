@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 
 
-def run(chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep):
+def run(chemotaxis, v_max, chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep):
     Lx, Ly = 1600, 1400
     Nx, Ny = 161, 141
     dx, dy = Lx / (Nx - 1), Ly / (Ny - 1)
@@ -210,8 +210,15 @@ def run(chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init,
                 + wx * wy * g11y
             )
 
-            dcell_x[bound_mask] += chi * gx_i[bound_mask] * dt
-            dcell_y[bound_mask] += chi * gy_i[bound_mask] * dt
+            if chemotaxis == "keller_segel":
+                dcell_x[bound_mask] += chi * gx_i[bound_mask] * dt
+                dcell_y[bound_mask] += chi * gy_i[bound_mask] * dt
+            elif chemotaxis == "saturating":
+                g0 = v_max / chi
+                denom = 1.0 + (np.sqrt(gx_i**2 + gy_i**2) / g0)
+                dcell_x[bound_mask] += (chi * gx_i[bound_mask] / denom[bound_mask]) * dt
+                dcell_y[bound_mask] += (chi * gy_i[bound_mask] / denom[bound_mask]) * dt
+
 
         proposed_x = cell_x + dcell_x
         proposed_y = cell_y + dcell_y
@@ -277,6 +284,8 @@ def run(chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init,
 def main():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument("--chemotaxis", type=str, choices=['keller_segel', 'saturating'], required=True)
+    parser.add_argument("--v_max", type=float)
     parser.add_argument("--chi", type=float, required=True)
     parser.add_argument("--alpha", type=float, required=True)
     parser.add_argument("--Pe", type=float, required=True)
@@ -292,6 +301,8 @@ def main():
 
     args = parser.parse_args()
 
+    chemotaxis = args.chemotaxis
+    v_max = args.v_max
     chi = args.chi
     alpha = args.alpha
     D_ratio = args.D_ratio
@@ -303,13 +314,16 @@ def main():
     rng_seed = args.rng_seed
     n_reps = args.n_reps
 
+    if args.chemotaxis == "saturating" and args.v_max is None:
+        parser.error("--v_max is required when --chemotaxis is 'saturating'")
+
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
 
     rng = np.random.default_rng(rng_seed)
 
     for rep in range(n_reps):
-        run(chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep)
+        run(chemotaxis, v_max, chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep)
 
 
 if __name__ == "__main__":
