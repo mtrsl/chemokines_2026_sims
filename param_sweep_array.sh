@@ -34,6 +34,8 @@ uv run \
     --n_cells ${n_cells} \
     --cell_motility ${cell_motility} \
     --chi ${chi} \
+    --chemotaxis saturating \
+    --v_max 5.0 \
     --cell_init ${cell_init} \
     --CCL21_added ${CCL21_added} \
-    --n_reps 3
+    --n_reps 1
