@@ -4,8 +4,8 @@
 #SBATCH -t 4:00:00
 #SBATCH --mem=2G
 #SBATCH -c 1
-#SBATCH -e /hps/nobackup/jlees/mjr/slurm_logs/param_sweep_array/%A/%a.err
-#SBATCH -o /hps/nobackup/jlees/mjr/slurm_logs/param_sweep_array/%A/%a.out
+#SBATCH -e /hps/nobackup/jlees/mjr/slurm_logs/ck_param_sweep_array/%A/%a.err
+#SBATCH -o /hps/nobackup/jlees/mjr/slurm_logs/ck_param_sweep_array/%A/%a.out
 #SBATCH --mail-type ALL
 #SBATCH --array=1-100
 
