@@ -16,8 +16,8 @@ all_params_file=${base_dir}/all_params.csv
 uv run \
     --project ${base_dir} \
     ${base_dir}/generate_param_sets.py \
-    --fixed_params_file ${fixed_params_file} \
-    --all_params_file ${all_params_file}
+    ${fixed_params_file} \
+    ${all_params_file}
 
 n_lines=$(wc -l ${all_params_file} | cut -d' ' -f1)
 n_param_sets=$((n_lines - 1))
