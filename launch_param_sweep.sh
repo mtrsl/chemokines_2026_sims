@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH --job-name=ck_gen_params
+#SBATCH --job-name=ck_launch_param_sweep
 #SBATCH -t 1:00:00
 #SBATCH --mem=1G
 #SBATCH -c 1
-#SBATCH -e /hps/nobackup/jlees/mjr/slurm_logs/ck_gen_params/%A/%a.err
-#SBATCH -o /hps/nobackup/jlees/mjr/slurm_logs/ck_gen_params/%A/%a.out
+#SBATCH -e /hps/nobackup/jlees/mjr/slurm_logs/ck_launch_param_sweep/%A/%a.err
+#SBATCH -o /hps/nobackup/jlees/mjr/slurm_logs/ck_launch_param_sweep/%A/%a.out
 #SBATCH --mail-type ALL
 
 base_dir=/nfs/research/jlees/mjr/chemokines/chemokines_2026_paper_sims

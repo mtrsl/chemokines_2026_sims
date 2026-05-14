@@ -19,7 +19,7 @@ all_params_file=${base_dir}/all_params.csv
 params=$(sed -n "$((task_id + 1))p" $all_params_file)
 
 # Parse columns
-IFS=',' read -r cell_init D_ratio cell_motility chi alpha Pe n_cells CCL21_added <<< "$params"
+IFS=',' read -r cell_init D_ratio cell_motility v_max chi alpha Pe n_cells CCL21_added <<< "$params"
 
 output_dir=/hps/nobackup/jlees/mjr/chemokines/sims/${task_id}
 mkdir -p $output_dir
@@ -35,7 +35,7 @@ uv run \
     --cell_motility ${cell_motility} \
     --chi ${chi} \
     --chemotaxis saturating \
-    --v_max 5.0 \
+    --v_max ${v_max} \
     --cell_init ${cell_init} \
     --CCL21_added ${CCL21_added} \
-    --n_reps 1
+    --n_reps 3

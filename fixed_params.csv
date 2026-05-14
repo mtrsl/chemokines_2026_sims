@@ -1,2 +1,2 @@
-cell_init,D_ratio,cell_motility
-grid,2.0,5.0
+cell_init,D_ratio,cell_motility,v_max
+grid,2.0,5.0,0.5
