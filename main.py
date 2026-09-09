@@ -81,7 +81,7 @@ def run(chemotaxis, v_max, chi, alpha, beta, D_ratio, Pe, n_cells, CCL21_added, 
         adv_y2 = u_p * c2_y_m + u_m * c2_y_p
 
         c1_new[1:-1, 1:-1] = c1_c + dt * (
-            D_CCL19 * lap1 - adv_y1 - d * c1_c + source[1:-1, 1:-1]
+            D_CCL19 * lap1 - adv_y1 - d * c1_c + (1.0 - beta * c1_c) * source[1:-1, 1:-1]
         )
         c2_new[1:-1, 1:-1] = c2_c + dt * (
             D_CCL21 * lap2 - adv_y2 - d * c2_c
