@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 
 
-def run(chemotaxis, v_max, chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep):
+def run(chemotaxis, v_max, chi, alpha, beta, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep):
     Lx, Ly = 1600, 1400
     Nx, Ny = 161, 141
     dx, dy = Lx / (Nx - 1), Ly / (Ny - 1)
@@ -288,6 +288,7 @@ def main():
     parser.add_argument("--v_max", type=float)
     parser.add_argument("--chi", type=float, required=True)
     parser.add_argument("--alpha", type=float, required=True)
+    parser.add_argument("--beta", type=float, required=True)
     parser.add_argument("--Pe", type=float, required=True)
     parser.add_argument("--D_ratio", type=float, required=True)
     parser.add_argument("--n_cells", type=int, required=True)
@@ -305,6 +306,7 @@ def main():
     v_max = args.v_max
     chi = args.chi
     alpha = args.alpha
+    beta = args.beta
     D_ratio = args.D_ratio
     Pe = args.Pe
     n_cells = args.n_cells
@@ -323,7 +325,7 @@ def main():
     rng = np.random.default_rng(rng_seed)
 
     for rep in range(n_reps):
-        run(chemotaxis, v_max, chi, alpha, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep)
+        run(chemotaxis, v_max, chi, alpha, beta, D_ratio, Pe, n_cells, CCL21_added, cell_motility, cell_init, rng, output_dir, rep)
 
 
 if __name__ == "__main__":
