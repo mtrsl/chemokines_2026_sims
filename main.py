@@ -81,7 +81,7 @@ def run(chemotaxis, v_max, chi, alpha, beta, D_ratio, Pe, n_cells, CCL21_added, 
         adv_y2 = u_p * c2_y_m + u_m * c2_y_p
 
         c1_new[1:-1, 1:-1] = c1_c + dt * (
-            D_CCL19 * lap1 - adv_y1 - d * c1_c + (1.0 - beta * c1_c) * source[1:-1, 1:-1]
+            D_CCL19 * lap1 - adv_y1 - d * c1_c + alpha * (1.0 - beta * c1_c) * source[1:-1, 1:-1]
         )
         c2_new[1:-1, 1:-1] = c2_c + dt * (
             D_CCL21 * lap2 - adv_y2 - d * c2_c
@@ -244,7 +244,7 @@ def run(chemotaxis, v_max, chi, alpha, beta, D_ratio, Pe, n_cells, CCL21_added, 
             dxs = x[x_idx] - cell_x[i]
             dys = y[y_idx] - cell_y[i]
 
-            patch = alpha * np.exp(-(dxs[:, None] ** 2 + dys[None, :] ** 2) / sigma**2)
+            patch = np.exp(-(dxs[:, None] ** 2 + dys[None, :] ** 2) / sigma**2)
             cell_source[ix_min:ix_max + 1, iy_min:iy_max + 1] += patch
 
         c1, c2 = step(c1, c2, cell_source)
