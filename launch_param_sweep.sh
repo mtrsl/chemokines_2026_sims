@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=ck_launch_param_sweep
-#SBATCH -t 1:00:00
+#SBATCH -t 2-00:00:00
 #SBATCH --mem=1G
 #SBATCH -c 1
 #SBATCH -e /hps/nobackup/jlees/mjr/slurm_logs/ck_launch_param_sweep/%A/%a.err
@@ -22,4 +22,6 @@ uv run \
 n_lines=$(wc -l ${all_params_file} | cut -d' ' -f1)
 n_param_sets=$((n_lines - 1))
 
-sbatch --array=1-${n_param_sets} ${base_dir}/param_sweep_array.sh
+sbatch -W --array=1-${n_param_sets} ${base_dir}/param_sweep_array.sh
+
+sbatch -W ${base_dir}/compress_simple.sh
