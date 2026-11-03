@@ -23,19 +23,13 @@ def main():
 
     # hardcode for now. maybe parse args instead - how to pass lists of params cleanly?
     varying = {
-        # "chi": [0.04, 0.4, 4.0, 40.0],
-        # "alpha": [0.0008, 0.0065, 0.05, 0.388, 3, 9.4603],
-        # "beta": [0.0, 0.01, 0.1],
-        # "Pe": [-5.0, 0.0, 5.0],
-        # "n_cells": [20, 50, 120, 210, 320],
-        # "CCL21_added": ["true", "false"],
-        "chi": [0.04, 40.0],
-        "alpha": [0.0008, 9.4603],
-        "beta": [0.0, 0.001, 0.01],
-        "Pe": [0.0, 5.0],
-        "n_cells": [20, 50, 120, 210, 320],
-        "CCL21_added": ["false"],
-        "cell_motility": [1.6, 2.3, 5.0],
+        "chi": [0.04, 0.4, 4.0, 40.0],
+        "alpha": [0.0065, 0.05, 0.388, 3, 9.4603],
+        "beta": [0.001, 0.01],
+        "Pe": [-5.0, 0.0, 5.0],
+        "n_cells": [50, 120, 210, 320],
+        "CCL21_added": ["true", "false"],
+        "cell_motility": [1.6],
     }
 
     fixed_params = pl.read_csv(fixed_params_file)
