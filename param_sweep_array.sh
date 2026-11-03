@@ -19,7 +19,7 @@ all_params_file=${base_dir}/all_params.csv
 params=$(sed -n "$((task_id + 1))p" $all_params_file)
 
 # Parse columns
-IFS=',' read -r cell_init D_ratio cell_motility v_max chi alpha beta Pe n_cells CCL21_added <<< "$params"
+IFS=',' read -r cell_init D_ratio v_max chi alpha beta Pe n_cells CCL21_added cell_motility <<< "$params"
 
 output_dir=/hps/nobackup/jlees/mjr/chemokines/sims/${task_id}
 mkdir -p $output_dir

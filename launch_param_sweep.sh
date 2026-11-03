@@ -8,6 +8,8 @@
 #SBATCH -o /hps/nobackup/jlees/mjr/slurm_logs/ck_launch_param_sweep/%A/%a.out
 #SBATCH --mail-type ALL
 
+set -euo pipefail
+
 base_dir=/nfs/research/jlees/mjr/chemokines/chemokines_2026_paper_sims
 
 fixed_params_file=${base_dir}/fixed_params.csv
